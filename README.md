@@ -6,6 +6,7 @@ It is an implementation with Redis Cluster and Redis Cache Manager.
 
 1. Snappy Compression 
 2. Kryo Serialization 
+3. Support ttl per cache key
 
 
 ### Gradle configuration ###
