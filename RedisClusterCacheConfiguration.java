@@ -85,19 +85,24 @@ public class RedisClusterCacheConfiguration implements CacheBackendConfiguration
 
 	@Bean
 	public LettuceClientConfiguration lettuceClientConfiguration() {
-		SocketOptions socketOptions = SocketOptions.builder().connectTimeout(Duration.ofSeconds(5)).build();
+		SocketOptions socketOptions = SocketOptions.builder()
+				.connectTimeout(Duration.ofSeconds(5))
+				.build();
+
 		ClusterTopologyRefreshOptions refreshOptions = ClusterTopologyRefreshOptions.builder()
-				.enableAllAdaptiveRefreshTriggers().build();
+				.enableAllAdaptiveRefreshTriggers()
+				.enablePeriodicRefresh()
+				.build();
+
 		ClusterClientOptions clientOptions = ClusterClientOptions.builder()
 				.socketOptions(socketOptions)
-				.pingBeforeActivateConnection(true)
-				.maxRedirects(redirects)
-				.autoReconnect(true)
-				.cancelCommandsOnReconnectFailure(true)
-				.disconnectedBehavior(DisconnectedBehavior.REJECT_COMMANDS)
 				.topologyRefreshOptions(refreshOptions)
+				.validateClusterNodeMembership(false)
 				.build();
-		return LettuceClientConfiguration.builder().commandTimeout(Duration.ofSeconds(15)).clientOptions(clientOptions)
+
+		return LettuceClientConfiguration.builder()
+				.commandTimeout(Duration.ofSeconds(10))
+				.clientOptions(clientOptions)
 				.build();
 	}
 
